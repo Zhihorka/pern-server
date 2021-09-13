@@ -25,7 +25,7 @@ app.post("/users", async (req, res) => {
     const description = req.body;
     const userid = description["userid"];
     const dateregistration = description["dateregistration"];
-    const datelastActivity = description["datelastActivity"];
+    const datelastactivity = description["datelastactivity"];
     const newUser = await pool.query(
       "INSERT INTO users (userid, dateregistration, datelastactivity) VALUES($1,$2,$3) RETURNING *",
       [userid, dateregistration, datelastactivity]
@@ -39,15 +39,18 @@ app.post("/users", async (req, res) => {
 
 //удаление пользователя
 
-app.delete("/users/:userid", async (res, req) => {
+
+
+
+app.delete("/users/:userid", async (req, res) => {
   try {
-    const {userid} = req.params;
-    const deleteUser = await pool.query("DELETE FROM users WHERE userid = $1", [
-      userid,
+    const { userid } = req.params;
+    const deleteTodo = await pool.query("DELETE FROM users WHERE userid = $1", [
+      userid
     ]);
-    res.json("user was deleted");
-  } catch (error) {
-    console.error(error.message);
+    res.json("Todo was deleted!");
+  } catch (err) {
+    console.log(err.message);
   }
 });
 
