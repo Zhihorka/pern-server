@@ -6,8 +6,6 @@ const pool = require("./db");
 app.use(cors());
 app.use(express.json());
 
-
-
 //получение списка всех пользователей
 
 app.get("/users", async (req, res) => {
@@ -36,23 +34,48 @@ app.post("/users", async (req, res) => {
   }
 });
 
-
 //удаление пользователя
-
-
-
 
 app.delete("/users/:userid", async (req, res) => {
   try {
     const { userid } = req.params;
     const deleteTodo = await pool.query("DELETE FROM users WHERE userid = $1", [
-      userid
+      userid,
     ]);
     res.json("Todo was deleted!");
   } catch (err) {
     console.log(err.message);
   }
 });
+
+
+//обновление пользователя
+
+app.put("/users/:userid", async (req, res) => {
+  try {
+    const description = req.body;
+    const userid = description["userid"];
+    const dateregistration = description["dateregistration"];
+    const datelastactivity = description["datelastactivity"];
+    const updateUser = await pool.query(
+      "UPDATE todo SET dateregistration = $2 AND SET datelastactivity = $3 WHERE userid = $1",
+      [userid, dateregistration, datelastactivity]
+    );
+
+    res.json("user was updated!");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
+
+
+
+
+
+
 
 app.listen(5000, () => {
   console.log("Na portu 5000 vse horosho");
